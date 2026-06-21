@@ -42,6 +42,8 @@ export default function ScrollSequence() {
       requestAnimationFrame(() => {
         // Fast clear and draw without state pushing/popping
         context.clearRect(0, 0, cw, ch);
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = "high";
         context.drawImage(image, cx, cy, drawWidth, drawHeight);
       });
     };
