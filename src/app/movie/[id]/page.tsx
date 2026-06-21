@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WatchlistButton from "@/components/WatchlistButton";
+import LetterboxdButton from "@/components/LetterboxdButton";
 import MultiverseVariants from "@/components/MultiverseVariants";
 import Image from "next/image";
 import { getMovieDetails, backdropUrl, posterUrl, formatYear, formatRating, IMG_BASE } from "@/lib/tmdb";
@@ -117,6 +118,7 @@ export default async function MovieDetailsPage({ params }: Props) {
 
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 40 }}>
               <WatchlistButton movie={movie} />
+              <LetterboxdButton movieId={movie.id} />
             </div>
 
             {/* OTT Providers */}
