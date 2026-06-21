@@ -5,8 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const frameCount = 1100;
-const frameStep = 4;
+const frameCount = 150;
+const frameStep = 31;
 const currentFrame = (index: number) => {
   const frameNum = Math.min(4655, index * frameStep + 1);
   return `/spidey408/${frameNum.toString().padStart(5, "0")}.jpg`;
@@ -48,35 +48,28 @@ export default function ScrollSequence() {
 
     const images: HTMLImageElement[] = [];
 
-    // Preload first batch
-    const preloadInitial = () => {
+    // Preload first image to set dimensions immediately
+    const firstImg = new Image();
+    firstImg.src = currentFrame(0);
+    firstImg.onload = () => {
       const dpr = window.devicePixelRatio || 1;
-      for (let i = 0; i < 30; i++) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        img.onload = () => {
-          if (i === 0) {
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            canvas.style.width = `${window.innerWidth}px`;
-            canvas.style.height = `${window.innerHeight}px`;
-            renderImage(img);
-            setLoaded(true);
-          }
-        };
-        images[i] = img;
-      }
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      renderImage(firstImg);
+      setLoaded(true);
     };
-    preloadInitial();
+    images[0] = firstImg;
 
     let currIdx = 0;
     const state = { frame: 0 };
 
-    // Function to load image and a wider window of nearby images
+    // Efficiently load nearby images to prevent network throttling
     const loadImages = (idx: number) => {
-      // Pre-load 50 images ahead and 10 behind
-      const start = Math.max(0, idx - 10);
-      const end = Math.min(frameCount - 1, idx + 50);
+      // Pre-load a small window to avoid crashing the browser's network queue
+      const start = Math.max(0, idx - 2);
+      const end = Math.min(frameCount - 1, idx + 8);
       for (let i = start; i <= end; i++) {
         if (!images[i]) {
           const img = new Image();
