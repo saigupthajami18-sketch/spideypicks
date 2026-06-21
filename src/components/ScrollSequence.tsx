@@ -26,31 +26,23 @@ export default function ScrollSequence() {
     if (!canvas || !context) return;
 
     const renderImage = (image: HTMLImageElement) => {
-      const dpr = window.devicePixelRatio || 1;
-      const hRatio = (canvas.width / dpr) / image.width;
-      const vRatio = (canvas.height / dpr) / image.height;
+      // Calculate layout directly in pixel space to avoid expensive scale/restore operations per frame
+      const cw = canvas.width;
+      const ch = canvas.height;
+      
+      const hRatio = cw / image.width;
+      const vRatio = ch / image.height;
       const ratio = Math.max(hRatio, vRatio);
-      const centerShift_x = ((canvas.width / dpr) - image.width * ratio) / 2;
-      const centerShift_y = ((canvas.height / dpr) - image.height * ratio) / 2;
+      
+      const drawWidth = image.width * ratio;
+      const drawHeight = image.height * ratio;
+      const cx = (cw - drawWidth) / 2;
+      const cy = (ch - drawHeight) / 2;
       
       requestAnimationFrame(() => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.imageSmoothingEnabled = true;
-        context.imageSmoothingQuality = "high";
-        context.save();
-        context.scale(dpr, dpr);
-        context.drawImage(
-          image,
-          0,
-          0,
-          image.width,
-          image.height,
-          centerShift_x,
-          centerShift_y,
-          image.width * ratio,
-          image.height * ratio
-        );
-        context.restore();
+        // Fast clear and draw without state pushing/popping
+        context.clearRect(0, 0, cw, ch);
+        context.drawImage(image, cx, cy, drawWidth, drawHeight);
       });
     };
 

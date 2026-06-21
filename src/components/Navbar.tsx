@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import SpideySenseButton from "./SpideySenseButton";
 
 const NAV_LINKS = [
   { label: "Trending", href: "#trending" },
@@ -95,6 +96,7 @@ export default function Navbar() {
 
         {/* Right actions */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <SpideySenseButton />
           {/* Search toggle */}
           <button
             id="search-toggle"
