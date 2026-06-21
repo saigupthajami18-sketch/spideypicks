@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WatchlistButton from "@/components/WatchlistButton";
+import MultiverseVariants from "@/components/MultiverseVariants";
 import Image from "next/image";
 import { getMovieDetails, backdropUrl, posterUrl, formatYear, formatRating, IMG_BASE } from "@/lib/tmdb";
 
@@ -199,6 +200,9 @@ export default async function MovieDetailsPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* Multiverse Variants (Similar Movies) */}
+        <MultiverseVariants movieId={movie.id} />
 
       </div>
 

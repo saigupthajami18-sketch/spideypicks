@@ -113,6 +113,9 @@ export const searchMovies = (query: string, page = "1") =>
 export const getMovieDetails = (id: number) =>
   fetchTMDB<Movie>(`/movie/${id}`, { append_to_response: "videos,credits,watch/providers" });
 
+export const getSimilarMovies = (id: number) =>
+  fetchTMDB<MovieResponse>(`/movie/${id}/similar`);
+
 export const getCollection = (id: number) =>
   fetchTMDB<any>(`/collection/${id}`);
 
